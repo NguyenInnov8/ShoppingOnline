@@ -10,100 +10,119 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.MyUtils;
+import validate.Validation;
 
 /**
  *
  * @author ASUS
  */
-public class UserList extends User {
+public class UserList extends ArrayList<User> {
 
-    private static final String userFilePath = "src\\data\\data.txt";
-    private List<User> userList = new ArrayList<>();
+    private static final long serialVersionUID = 1L;
+    private static final String userFilePath = "D:\\Self-studying project\\Java Programming\\ShoppingOnline\\src\\data\\userList.txt";
 
-    public void writeToUserList() throws IOException {
-        File f = new File(userFilePath);
-        if (!f.exists()) {
-            System.out.println("File does not exist");
-            return;
-        }
-        FileOutputStream fileOut = null;
-        try {
-            fileOut = new FileOutputStream(userFilePath);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            for (User user : userList) {
-                objectOut.writeObject(user);
+    public void writeToUserList() {
+        try ( OutputStream os = new FileOutputStream(userFilePath);  ObjectOutputStream oos = new ObjectOutputStream(os)) {
+
+            for (User user : this) {
+                oos.writeObject(user);
             }
-            System.out.println("Write Successfully to User List");
-            fileOut.flush();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(UserList.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fileOut.close();
-            } catch (IOException ex) {
-                Logger.getLogger(UserList.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
 
     public void readFromUserList() {
-    try (ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream(userFilePath))) {
-        while (true) {
-            try {
-                Object obj = objectIn.readObject();
-                if (obj == null) {
-                    break;
-                } else if (obj instanceof User) {
-                    User userReaded = (User) obj;
-                    this.addAUser(userReaded);
-                }
-            } catch (EOFException ex) {
-                // End of file reached, exit the loop
-                break;
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(UserList.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        File f = new File(userFilePath);
+        if (!f.canRead()) {
+            System.out.println("File cannot read");
         }
-    } catch (FileNotFoundException ex) {
-        System.out.println("File does not exist");
-    } catch (IOException ex) {
-        Logger.getLogger(UserList.class.getName()).log(Level.SEVERE, null, ex);
-    }
-}
+        try {
+            FileInputStream is = new FileInputStream(userFilePath);
+            ObjectInputStream ois = new ObjectInputStream(is);
+            this.clear();
+            while (true) {
+                try {
+                    User user = (User) ois.readObject();
+                    this.add(user);
+                } catch (EOFException e) {
+                    break; // Break the loop when EOFException occurs
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
 
-
-    public void addAUser(User user) {
-        userList.add(user);
+            System.out.println("UserList size: " + this.size()); // Print the size for debugging
+        } catch (EOFException eof) {
+            return;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void showAllUser() {
-        for (User user : userList) {
+
+        this.readFromUserList();
+        for (User user : this) {
             System.out.println(user);
         }
     }
-    
-   public User loginAccount() {
+
+    public void addAUser(User user) {
+        this.add(user);
+    }
+
+    public User loginUser() {
         String username = MyUtils.inputString("Enter Username: ");
         String password = MyUtils.inputString("Enter Password: ");
 
-        // Read the user list only once, outside the loop
-        readFromUserList();
+        this.readFromUserList();
 
-        for (User user : userList) {
+        for (User user : this) {
             if (username.equals(user.getUsername()) && password.equals(user.getPassword())) {
-                System.out.println("Login Successfully");
                 return user;
             }
         }
-    return null;
-}
+        return null;
+    }
+
+    public void registerUser() {
+        readFromUserList();
+        String username = "";
+        String password = "";
+        String fullname = "";
+        do {
+            username = MyUtils.inputString("Enter your username: ");
+        } while (!Validation.isValidUsername(username));
+
+        do {
+            password = MyUtils.inputString("Enter your password: ");
+        } while (!Validation.isValidPassword(password));
+
+        do {
+            fullname = MyUtils.inputString("Enter your full name: ");
+        } while (!Validation.isValidFullname(fullname));
+
+        User registeredUser = new User(username, password, fullname);
+        this.add(registeredUser);
+
+        System.out.println("UserList size before writing: " + this.size()); // Print size before writing
+
+        this.writeToUserList();
+
+        System.out.println("UserList size after writing: " + this.size()); // Print size after writing
+    }
 
 }
