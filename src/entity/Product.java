@@ -4,6 +4,7 @@
  */
 package entity;
 
+<<<<<<< HEAD
 /**
  *
  * @author ADMIN
@@ -43,6 +44,51 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+=======
+import java.io.Serializable;
+
+/**
+ *
+ * @author ASUS
+ */
+public class Product implements Serializable{
+    private static final long serialVersionUID = 7247210392003788145L;
+    private String productID;
+    private String productName;
+    private int quantity;
+    private double price;
+    private int soldQuantity;
+    private String shopId;
+    private double rating;
+
+    public Product() {
+    }
+
+    public Product(String productID, String productName, int quantity, double price, int soldQuantity, String shopId, double rating) {
+        this.productID = productID;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.price = price;
+        this.soldQuantity = soldQuantity;
+        this.shopId = shopId;
+        this.rating = rating;
+    }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public void setProductID(String productID) {
+        this.productID = productID;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+>>>>>>> 2a6a762303e3a5e316217fe012ade5d5135ad7e9
     }
 
     public int getQuantity() {
@@ -53,6 +99,7 @@ public class Product {
         this.quantity = quantity;
     }
 
+<<<<<<< HEAD
     @Override
     public String toString() {
         return "Product{" +
@@ -61,5 +108,36 @@ public class Product {
                 ", price=" + price +
                 ", quantity=" + quantity +
                 '}';
+=======
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getSoldQuantity() {
+        return soldQuantity;
+    }
+
+    public void setSoldQuantity(int soldQuantity) {
+        this.soldQuantity = soldQuantity;
+    }
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
+
+    @Override
+    public String toString() {
+         return String.format("|%6s|%-25s|%5d|%6.1f|%6d|%6s|%6.1f", 
+                               this.productID, this.productName, this.quantity,
+                               this.price, this.soldQuantity, this.shopId, this.rating);
+>>>>>>> 2a6a762303e3a5e316217fe012ade5d5135ad7e9
     }
 }

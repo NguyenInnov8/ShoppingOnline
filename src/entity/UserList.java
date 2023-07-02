@@ -30,7 +30,11 @@ import validate.Validation;
 public class UserList extends ArrayList<User> {
 
     private static final long serialVersionUID = 1L;
+<<<<<<< HEAD
     private static final String userFilePath = "ShoppingOnline\\src\\data\\userList.txt";
+=======
+    private static final String userFilePath = "src\\data\\userList.txt";
+>>>>>>> 2a6a762303e3a5e316217fe012ade5d5135ad7e9
 
     public void writeToUserList() {
         try ( OutputStream os = new FileOutputStream(userFilePath);  ObjectOutputStream oos = new ObjectOutputStream(os)) {

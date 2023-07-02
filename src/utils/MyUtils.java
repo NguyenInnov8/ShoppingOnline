@@ -51,4 +51,8 @@ public class MyUtils {
             System.out.println("Value cannot empty");
         } while(true);
     }
+    
+    public static int inputInteger(int min, int max) {
+        return inputInteger(null, min, max);
+    }
 }

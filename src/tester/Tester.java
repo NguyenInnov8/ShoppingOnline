@@ -4,6 +4,8 @@
  */
 package tester;
 
+import entity.Product;
+import entity.ProductList;
 import entity.User;
 import entity.UserList;
 import java.io.EOFException;
@@ -18,15 +20,10 @@ import java.util.logging.Logger;
  */
 public class Tester {
     public static void main(String[] args){
-            //User test = new User("nguyen1223", "Lenguyen1002@@@", "Nguyen Le Nguyen Ha");
-            //User test2 = new User("baoha123", "Baoha123@", "Ha Minh Quoc Bao");
-            UserList userList = new UserList();
-//            if(userList.loginUser() != null) {
-//                System.out.println("Login Successfully");
-//            } else {
-//                System.out.println("Login fail");
-//            }
-            userList.registerUser();
-            userList.showAllUser();
+            //Product prd1 = new Product("PRD1002", "Xa Phong", 100, 20, 40, "PAAAA", 5.0);
+            ProductList prdList= new ProductList();
+//            prdList.addOne(prd1);
+//            prdList.writeProductToList();
+            prdList.showAll();
     }
 }
