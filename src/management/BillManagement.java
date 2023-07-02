@@ -13,7 +13,7 @@ import entity.Bill;
 
 
 public class BillManagement {
-    private List<Bill> billList;
+    private final List<Bill> billList;
 
     public BillManagement() {
         billList = new ArrayList<>();

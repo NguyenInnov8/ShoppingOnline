@@ -7,16 +7,17 @@ package management;
 import java.util.ArrayList;
 import java.util.List;
 import entity.Product;
-/**
- *
- * @author ADMIN
- */
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductManagementImpl implements ProductManagement {
-    private List<Product> productList;
+    private final List<Product> productList;
+    private final Map<String, List<Integer>> productRatings;
+
 
     public ProductManagementImpl() {
         productList = new ArrayList<>();
+        productRatings = new HashMap<>();
     }
 
     @Override
@@ -27,7 +28,7 @@ public class ProductManagementImpl implements ProductManagement {
     @Override
     public Product readProduct(int productId) {
         for (Product product : productList) {
-            if (product.getId() == productId) {
+            if (product.getProductID == productId) {
                 return product;
             }
         }
@@ -37,10 +38,13 @@ public class ProductManagementImpl implements ProductManagement {
     @Override
     public void updateProduct(int productId, Product updatedProduct) {
         for (Product product : productList) {
-            if (product.getId() == productId) {
-                product.setName(updatedProduct.getName());
-                product.setPrice(updatedProduct.getPrice());
+            if (product.getProductID == productId) {
+                product.setProductName(updatedProduct.getProductName());
                 product.setQuantity(updatedProduct.getQuantity());
+                product.setPrice(updatedProduct.getPrice());
+                product.setSoldQuantity(updatedProduct.getSoldQuantity());
+                product.setShopId(updatedProduct.getShopId());
+                product.setRating(updatedProduct.getRating());
                 break;
             }
         }
@@ -48,15 +52,39 @@ public class ProductManagementImpl implements ProductManagement {
 
     @Override
     public void deleteProduct(int productId) {
+        String stringProductId = Integer.toString(productId);
         Product productToRemove = null;
         for (Product product : productList) {
-            if (product.getId() == productId) {
+            if (product.getProductID == productId) {
                 productToRemove = product;
                 break;
             }
         }
         if (productToRemove != null) {
             productList.remove(productToRemove);
+            productRatings.remove(stringProductId);
         }
     }
+    
+    
+    public void rateProduct(String productId, int rating) {
+        List<Integer> ratings = productRatings.getOrDefault(productId, new ArrayList<>());
+        ratings.add(rating);
+        productRatings.put(productId, ratings);
+    }
+
+    @Override
+    public double getProductAverageRating(String productId) {
+        List<Integer> ratings = productRatings.getOrDefault(productId, new ArrayList<>());
+        if (ratings.isEmpty()) {
+            return 0;
+        } else {
+            int sum = 0;
+            for (int rating : ratings) {
+                sum += rating;
+            }
+            return (double) sum / ratings.size();
+        }
+    }
+   
 }

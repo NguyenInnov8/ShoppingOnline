@@ -19,10 +19,12 @@ public class BillManagementImpl extends BillManagement {
         billList = new ArrayList<>();
     }
 
+    @Override
     public void createBill(Bill bill) {
         billList.add(bill);
     }
 
+    @Override
     public Bill readBill(int billId) {
         for (Bill bill : billList) {
             if (bill.getId() == billId) {
@@ -32,6 +34,7 @@ public class BillManagementImpl extends BillManagement {
         return null;
     }
 
+    @Override
     public void updateBill(int billId, Bill updatedBill) {
         for (Bill bill : billList) {
             if (bill.getId() == billId) {
@@ -42,6 +45,7 @@ public class BillManagementImpl extends BillManagement {
         }
     }
 
+    @Override
     public void deleteBill(int billId) {
         Bill billToRemove = null;
         for (Bill bill : billList) {

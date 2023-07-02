@@ -13,4 +13,5 @@ public interface ProductManagement {
     Product readProduct(int productId);
     void updateProduct(int productId, Product product);
     void deleteProduct(int productId);
+    double getProductAverageRating(String productId);
 }

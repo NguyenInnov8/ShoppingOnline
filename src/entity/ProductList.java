@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import utils.MyUtils;
 import validate.Validation;
 
@@ -22,95 +23,97 @@ import validate.Validation;
  *
  * @author ASUS
  */
-public class ProductList extends HashMap<String, Product>{
+public class ProductList extends HashMap<String, Product> {
     private static final long serialVersionUID = 1L;
-    private String header = "--------------------------------------------------------------------------------\n"+
-                            "| Code     | Product name         | Quantity | Price | Sold Quantity | Rate |\n"+
-                            "|----------|----------------------|----------|-------|---------------|------|\n";
+    private String header = "--------------------------------------------------------------------------------\n"
+            + "| Code     | Product name         | Quantity | Price | Sold Quantity | Rate |\n"
+            + "|----------|----------------------|----------|-------|---------------|------|\n";
     private String footer = "----------------------------------------------------------------------------";
-    private final static String productFile = "src\\data\\productList.txt";
+    private final static String productFile = "src/data/productList.txt";
+
     public List<Product> toList() {
         return new ArrayList<>(this.values());
     }
-    
-    public void addOne(Product prd) {
-        this.putIfAbsent(prd.getProductID(), prd);
+
+    public void addProduct(Product product) {
+        this.put(product.getProductID(), product);
     }
-    
-    public void showAll() {
-        readFromProductList();
+
+    public void removeProduct(String productID) {
+        this.remove(productID);
+    }
+
+    public void writeProductToList() throws IOException {
+        File file = new File(productFile);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        try (OutputStream os = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(os)) {
+            for (Product product : this.values()) {
+                oos.writeObject(product);
+            }
+        }
+    }
+
+    public void readFromProductList() throws IOException, ClassNotFoundException {
+        File file = new File(productFile);
+        if (!file.exists()) {
+            return;
+        }
+
+        try (FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis)) {
+            while (true) {
+                try {
+                    Product product = (Product) ois.readObject();
+                    this.put(product.getProductID(), product);
+                } catch (EOFException e) {
+                    break;
+                }
+            }
+        }
+    }
+
+    public void displayAll() {
         System.out.println(header);
-        for (Product prd: toList()) {
-            System.out.println(prd);
+        for (Product product : this.values()) {
+            System.out.println(product);
         }
         System.out.println(footer);
     }
-    
-    public void writeProductToList() {
-        try ( OutputStream os = new FileOutputStream(productFile);  ObjectOutputStream oos = new ObjectOutputStream(os)) {
 
-            for (Product product: toList()) {
-                oos.writeObject(product);
+    public void displayLowQuantityProduct() {
+        System.out.println(header);
+        for (Product product : this.values()) {
+            if (product.getQuantity() < 10) {
+                System.out.println(product);
             }
-            oos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        System.out.println(footer);
     }
-    
-    public void readFromProductList() {
-          File f = new File(productFile);
-        if (!f.canRead()) {
-            System.out.println("File cannot read");
-        }
-        try {
-            FileInputStream is = new FileInputStream(productFile);
-            ObjectInputStream ois = new ObjectInputStream(is);
-            this.clear();
-            while (true) {
-                try {
-                    Product prd = (Product) ois.readObject();
-                    this.addOne(prd);
-                } catch (EOFException e) {
-                    break; // Break the loop when EOFException occurs
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+
+    public void displayHighRatingProduct() {
+        System.out.println(header);
+        for (Product product : this.values()) {
+            if (product.getRating() >= 4.5) {
+                System.out.println(product);
             }
-        } catch (EOFException eof) {
-            return;
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        System.out.println(footer);
     }
-    
-    public void createProduct() {
-        readFromProductList();
-        String prdID = "";
-        String prdName = "";
-        double price = 0.0;
-        int quantity = 0;
-        int soldQuantity = 0;
-        double rating = 0.0;
-        String shopID = "ABC";
-        do {            
-            prdID = MyUtils.inputString("Enter Product's ID: ");
-        } while (!Validation.isValidProductId(prdID));
-        
-        do {
-            prdName = MyUtils.inputString("Enter Product's name: ");
-        } while (!Validation.isValidProductName(prdName));
-        
-        do {
-            price = (double) MyUtils.inputInteger("Enter Product's price", 0, 10000000);
-        } while (!Validation.isValidProductPrice(price));
-        
-        do {
-            quantity = MyUtils.inputInteger("Enter Product's quantity ", 0, 10000000);
-        } while(!Validation.isValidProductQuantity(quantity));
-        
-        Product registeredProduct = new Product(prdID, prdName, quantity, price, soldQuantity, shopID, rating);
-        addOne(registeredProduct);
-        writeProductToList();
+
+    public boolean isProductIDExist(String productID) {
+        return this.containsKey(productID);
+    }
+
+    public void showAll() {
+    System.out.println(header);
+    for (Map.Entry<String, Product> entry : this.entrySet()) {
+        Product product = entry.getValue();
+        System.out.println(product);
+        }
+    System.out.println(footer);
     }
 }

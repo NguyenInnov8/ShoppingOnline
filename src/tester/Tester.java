@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class Tester {
     public static void main(String[] args){
-            //Product prd1 = new Product("PRD1002", "Xa Phong", 100, 20, 40, "PAAAA", 5.0);
+//            Product prd1 = new Product("PRD1002", "Xa Phong", 100, 20, 40, "PAAAA", 5.0);
             ProductList prdList= new ProductList();
 //            prdList.addOne(prd1);
 //            prdList.writeProductToList();

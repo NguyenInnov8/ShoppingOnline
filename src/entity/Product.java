@@ -4,54 +4,9 @@
  */
 package entity;
 
-<<<<<<< HEAD
-/**
- *
- * @author ADMIN
- */
-public class Product {
-    private int id;
-    private String name;
-    private double price;
-    private int quantity;
-
-    public Product(int id, String name, double price, int quantity) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-=======
 import java.io.Serializable;
 
-/**
- *
- * @author ASUS
- */
-public class Product implements Serializable{
+public class Product implements Serializable {
     private static final long serialVersionUID = 7247210392003788145L;
     private String productID;
     private String productName;
@@ -60,6 +15,7 @@ public class Product implements Serializable{
     private int soldQuantity;
     private String shopId;
     private double rating;
+    public int getProductID;
 
     public Product() {
     }
@@ -88,7 +44,6 @@ public class Product implements Serializable{
 
     public void setProductName(String productName) {
         this.productName = productName;
->>>>>>> 2a6a762303e3a5e316217fe012ade5d5135ad7e9
     }
 
     public int getQuantity() {
@@ -99,16 +54,6 @@ public class Product implements Serializable{
         this.quantity = quantity;
     }
 
-<<<<<<< HEAD
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                '}';
-=======
     public double getPrice() {
         return price;
     }
@@ -133,11 +78,18 @@ public class Product implements Serializable{
         this.shopId = shopId;
     }
 
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
     @Override
     public String toString() {
-         return String.format("|%6s|%-25s|%5d|%6.1f|%6d|%6s|%6.1f", 
-                               this.productID, this.productName, this.quantity,
-                               this.price, this.soldQuantity, this.shopId, this.rating);
->>>>>>> 2a6a762303e3a5e316217fe012ade5d5135ad7e9
+        return String.format("|%6s|%-25s|%5d|%6.1f|%6d|%6s|%6.1f",
+                this.productID, this.productName, this.quantity,
+                this.price, this.soldQuantity, this.shopId, this.rating);
     }
 }
