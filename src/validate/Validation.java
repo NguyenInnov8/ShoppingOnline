@@ -4,11 +4,16 @@
  */
 package validate;
 
+import entity.Product;
+import entity.ProductList;
 import entity.User;
 import entity.UserList;
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -17,6 +22,8 @@ import java.util.logging.Logger;
  */
 public class Validation extends UserList{
     private static UserList list = new UserList();
+    private static ProductList prdList = new ProductList();
+    String productIDPattern = "prd\\\\d{6}";
     public static boolean isValidUsername(String username) {
         System.out.println("Username Error:");
         int minLenUsername = 5;
@@ -61,6 +68,11 @@ public class Validation extends UserList{
                 
                 if(isSupportedSymbolsUsername(c) && isSupportedSymbolsUsername(usernameChar[currentPosition + 1])) {
                     System.out.println("These symbols ('_', '.', '-') cannot be consecutively");
+                    return false;
+                }
+                
+                if(Character.isWhitespace(c)) {
+                    System.out.println("Username cannot contain whitespace");
                     return false;
                 }
             }
@@ -191,6 +203,73 @@ public class Validation extends UserList{
                 return false;
             }
             
+        }
+        return true;
+    }
+    
+    // Validation function for Product
+    
+    public static boolean isValidProductId(String prdID) {
+       String validProductIDPattern = "prd\\d{6}";
+       Pattern regex = Pattern.compile(validProductIDPattern);
+       Matcher matcher = regex.matcher(prdID);
+       
+       if(!matcher.matches()) {
+           System.out.println("Please enter correct product ID Format (prdxxxxxx, with x is nature number)");
+           return false;
+       }
+       
+       prdList.readFromProductList();
+       
+        for (Product product: prdList.toList()) {
+            if(product.getProductID().equals(prdID)) {
+                System.out.println("This Product ID already exists, please choose another product ID");
+                return false;
+            }
+        }
+       return true;
+    }
+    
+    public static boolean isValidProductName(String prdName) {
+        char[] prdNameChar = prdName.trim().toCharArray();
+        
+        for (int i = 0; i < prdNameChar.length; i++) {
+            if(Character.isWhitespace(prdNameChar[i]) && Character.isWhitespace(prdNameChar[i + 1])) {
+                System.out.println("Your product name seems like in wrong format(More than one space between 2 words).");
+                return false;
+            }
+            
+        }
+        return true;
+    }
+    
+    public static boolean isValidProductQuantity(int quantity) {
+        if(quantity < 0) {
+            System.out.println("Quantity cannot be under 0");
+            return false;
+        }
+        return true;
+    }
+    
+    public static boolean isValidProductPrice(double price) {
+        if(price < 0) {
+            System.out.println("Price cannot be under 0");
+        }
+        return true;
+    }
+    
+    public static boolean isValidProductRating(double rating) {
+        if(rating < 0 && rating > 5){
+            System.out.println("Rating cannot be out of 0 to 5");
+            return false;
+        }
+        return true;
+    }
+    
+    public static boolean isValidProductSoldQuantity(int soldQuantity) {
+        if(soldQuantity != 0) {
+            System.out.println("Sold Quantity always innitize to 0");
+            return false;
         }
         return true;
     }
