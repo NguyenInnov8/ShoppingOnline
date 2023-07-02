@@ -30,7 +30,7 @@ import validate.Validation;
 public class UserList extends ArrayList<User> {
 
     private static final long serialVersionUID = 1L;
-    private static final String userFilePath = "D:\\Self-studying project\\Java Programming\\ShoppingOnline\\src\\data\\userList.txt";
+    private static final String userFilePath = "ShoppingOnline\\src\\data\\userList.txt";
 
     public void writeToUserList() {
         try ( OutputStream os = new FileOutputStream(userFilePath);  ObjectOutputStream oos = new ObjectOutputStream(os)) {
