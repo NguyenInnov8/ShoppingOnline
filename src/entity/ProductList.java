@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import utils.MyUtils;
-import validate.Validation;
 
 /**
  *
@@ -25,10 +23,10 @@ import validate.Validation;
  */
 public class ProductList extends HashMap<String, Product> {
     private static final long serialVersionUID = 1L;
-    private String header = "--------------------------------------------------------------------------------\n"
+    private final String header = "--------------------------------------------------------------------------------\n"
             + "| Code     | Product name         | Quantity | Price | Sold Quantity | Rate |\n"
             + "|----------|----------------------|----------|-------|---------------|------|\n";
-    private String footer = "----------------------------------------------------------------------------";
+    private final String footer = "----------------------------------------------------------------------------";
     private final static String productFile = "src/data/productList.txt";
 
     public List<Product> toList() {
