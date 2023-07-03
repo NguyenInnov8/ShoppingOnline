@@ -5,12 +5,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  *
  * @author ASUS
  */
-public class Product implements Serializable{
+public class Product implements Serializable, Comparable {
+
     private static final long serialVersionUID = 7247210392003788145L;
     private String productID;
     private String productName;
@@ -83,8 +85,35 @@ public class Product implements Serializable{
 
     @Override
     public String toString() {
-         return String.format("|%6s|%-25s|%5d|%6.1f|%6d|%6s|%6.1f", 
-                               this.productID, this.productName, this.quantity,
-                               this.price, this.soldQuantity, this.shopId, this.rating);
+        return String.format("|%6s|%-25s|%5d|%6.1f|%6d|%6s|%6.1f",
+                this.productID, this.productName, this.quantity,
+                this.price, this.soldQuantity, this.shopId, this.rating);
     }
+
+    @Override
+    public int compareTo(Object o) {
+        Product toComaprePrd = (Product) o;
+        if (this.soldQuantity == toComaprePrd.soldQuantity) {
+            return 0;
+        } else if (this.soldQuantity > toComaprePrd.soldQuantity) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    public static Comparator<Product> compareByRatingStar = new Comparator<Product>() {
+        @Override
+        public int compare(Product o1, Product o2) {
+            // Reverse the comparison by switching the order of o1 and o2
+            if (o1.rating == o2.rating) {
+                return 0;
+            } else if (o1.rating > o2.rating) {
+                return -1; // Return -1 instead of 1 to sort in descending order
+            } else {
+                return 1; // Return 1 instead of -1 to sort in descending order
+            }
+        }
+    };
+
 }

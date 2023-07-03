@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import utils.MyUtils;
@@ -24,7 +25,7 @@ import validate.Validation;
  */
 public class ProductList extends HashMap<String, Product>{
     private static final long serialVersionUID = 1L;
-    private String header = "--------------------------------------------------------------------------------\n"+
+    private String header = "----------------------------------------------------------------------------\n"+
                             "| Code     | Product name         | Quantity | Price | Sold Quantity | Rate |\n"+
                             "|----------|----------------------|----------|-------|---------------|------|\n";
     private String footer = "----------------------------------------------------------------------------";
@@ -37,11 +38,10 @@ public class ProductList extends HashMap<String, Product>{
         this.putIfAbsent(prd.getProductID(), prd);
     }
     
-    public void showAll() {
-        readFromProductList();
+    public void showAll(List<Product> l) {
         System.out.println(header);
-        for (Product prd: toList()) {
-            System.out.println(prd);
+        for (Product product : l) {
+            System.out.println(product);
         }
         System.out.println(footer);
     }
@@ -112,5 +112,17 @@ public class ProductList extends HashMap<String, Product>{
         Product registeredProduct = new Product(prdID, prdName, quantity, price, soldQuantity, shopID, rating);
         addOne(registeredProduct);
         writeProductToList();
+    }
+    
+    public void sortBySoldQuantity() {
+        List<Product> toSortList = toList();
+        Collections.sort(toSortList, Collections.reverseOrder());
+        showAll(toSortList);
+    }
+    
+    public void SortByRating() {
+        List<Product> toSortList = toList();
+        Collections.sort(toSortList, Product.compareByRatingStar);
+        showAll(toSortList);
     }
 }
