@@ -7,19 +7,13 @@ package entity;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import utils.MyUtils;
 import validate.Validation;
 
@@ -27,13 +21,14 @@ import validate.Validation;
  *
  * @author ASUS
  */
-public class UserList extends ArrayList<User> {
+public class UserList extends ArrayList<User> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final String userFilePath = "src\\data\\userList.txt";
+    private static final String userFilePath = "data/userList.txt";
 
     public void writeToUserList() {
-        try ( OutputStream os = new FileOutputStream(userFilePath);  ObjectOutputStream oos = new ObjectOutputStream(os)) {
+        try (FileOutputStream os = new FileOutputStream(userFilePath);
+                ObjectOutputStream oos = new ObjectOutputStream(os)) {
 
             for (User user : this) {
                 oos.writeObject(user);
@@ -47,11 +42,11 @@ public class UserList extends ArrayList<User> {
     public void readFromUserList() {
         File f = new File(userFilePath);
         if (!f.canRead()) {
-            System.out.println("File cannot read");
+            System.out.println("File cannot be read");
+            return;
         }
-        try {
-            FileInputStream is = new FileInputStream(userFilePath);
-            ObjectInputStream ois = new ObjectInputStream(is);
+        try (FileInputStream is = new FileInputStream(userFilePath);
+                ObjectInputStream ois = new ObjectInputStream(is)) {
             this.clear();
             while (true) {
                 try {
@@ -65,15 +60,12 @@ public class UserList extends ArrayList<User> {
             }
 
             System.out.println("UserList size: " + this.size()); // Print the size for debugging
-        } catch (EOFException eof) {
-            return;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void showAllUser() {
-
         this.readFromUserList();
         for (User user : this) {
             System.out.println(user);
@@ -124,5 +116,4 @@ public class UserList extends ArrayList<User> {
 
         System.out.println("UserList size after writing: " + this.size()); // Print size after writing
     }
-
 }
