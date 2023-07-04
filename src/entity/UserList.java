@@ -24,7 +24,7 @@ import validate.Validation;
 public class UserList extends ArrayList<User> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final String userFilePath = "data/userList.txt";
+    private static final String userFilePath = "src\\data\\userList.txt";
 
     public void writeToUserList() {
         try (FileOutputStream os = new FileOutputStream(userFilePath);
@@ -58,8 +58,6 @@ public class UserList extends ArrayList<User> implements Serializable {
                     e.printStackTrace();
                 }
             }
-
-            System.out.println("UserList size: " + this.size()); // Print the size for debugging
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,6 +82,7 @@ public class UserList extends ArrayList<User> implements Serializable {
 
         for (User user : this) {
             if (username.equals(user.getUsername()) && password.equals(user.getPassword())) {
+                System.out.println("Login Successfully. Welcome "+ user.getUsername());
                 return user;
             }
         }
@@ -110,10 +109,8 @@ public class UserList extends ArrayList<User> implements Serializable {
         User registeredUser = new User(username, password, fullname);
         this.add(registeredUser);
 
-        System.out.println("UserList size before writing: " + this.size()); // Print size before writing
-
+     
         this.writeToUserList();
-
-        System.out.println("UserList size after writing: " + this.size()); // Print size after writing
+        System.out.println("Register Successfully! Please back to the main menu to login");
     }
 }
