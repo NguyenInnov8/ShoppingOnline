@@ -68,12 +68,10 @@ public class Menu {
     public void register() {
         System.out.println("==== Register ====");
         userList.registerUser();
-<<<<<<< HEAD
         do {
             System.out.println("Press 1 to back to main menu ");
         } while(!"1".equals(MyUtils.inputString("Enter: ")));
-=======
->>>>>>> f34c9ae5d4dda2c57da7f9c07561b265f30e9bb6
+
     }
 
     public void login() {
@@ -123,19 +121,16 @@ public class Menu {
                     displayAllProducts();
                     break;
                 case 2:
-<<<<<<< HEAD
                     addProductToCart();
                     break;
                 case 3:
                     cartMenu();
-=======
                     displayAddProductToCart();
                     break;
-                case 3:
-                    displayCartItem();
->>>>>>> f34c9ae5d4dda2c57da7f9c07561b265f30e9bb6
-                    break;
                 case 4:
+                    displayCartItem();
+                    break;
+                case 5:
                     exit = true;
                     userMenu();
                     break;
@@ -154,7 +149,6 @@ public class Menu {
     }
 
     public void displayAllProducts() {
-<<<<<<< HEAD
         System.out.println("==== All Products ====");
         // Implement logic to display all products in the shop
     }
@@ -168,10 +162,7 @@ public class Menu {
         System.out.println("==== Cart Menu ====");
         // Implement logic for the cart menu
     }
-=======
-        prdList.readFromProductList();
-        prdList.displayAll();
-    }
+     
     
     public void displayAddProductToCart() {
         displayAllProducts();
@@ -187,5 +178,4 @@ public class Menu {
     public void addProductToCart(String prdID, int quantity) {
         sCart.addProductToCart(currentUser, prdID, quantity);
     }
->>>>>>> f34c9ae5d4dda2c57da7f9c07561b265f30e9bb6
 }

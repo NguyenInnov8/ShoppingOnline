@@ -7,22 +7,14 @@ package entity;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author ADMIN
- */
 public class ShoppingCart extends HashMap<String, Product> {
 
     private final static String productInCartFile = "src\\data\\productInCart.txt";
@@ -41,7 +33,8 @@ public class ShoppingCart extends HashMap<String, Product> {
     }
 
     public void writeProductToCartList() {
-        try ( FileOutputStream os = new FileOutputStream(productInCartFile);  ObjectOutputStream oos = new ObjectOutputStream(os)) {
+        try (FileOutputStream os = new FileOutputStream(productInCartFile);
+             ObjectOutputStream oos = new ObjectOutputStream(os)) {
 
             for (Product prd : toList()) {
                 oos.writeObject(prd);
@@ -58,7 +51,8 @@ public class ShoppingCart extends HashMap<String, Product> {
             System.out.println("File cannot be read");
             return;
         }
-        try ( FileInputStream is = new FileInputStream(productInCartFile);  ObjectInputStream ois = new ObjectInputStream(is)) {
+        try (FileInputStream is = new FileInputStream(productInCartFile);
+             ObjectInputStream ois = new ObjectInputStream(is)) {
             this.clear();
             while (true) {
                 try {
@@ -77,12 +71,12 @@ public class ShoppingCart extends HashMap<String, Product> {
         }
     }
 
-    public void addProductToCart(User user, String productID, int Quantity) {
+    public void addProductToCart(User user, String productID, int quantity) {
         readFromProductCartList();
         prdList.readFromProductList();
         for (Product product : prdList.toList()) {
             if (product.getProductID().equals(productID)) {
-                product.setQuantity(Quantity);
+                product.setQuantity(quantity);
                 product.setUser(user);
                 this.put(productID, product);
             }
@@ -90,11 +84,8 @@ public class ShoppingCart extends HashMap<String, Product> {
         writeProductToCartList();
     }
 
-//    public void addProduct(Product product) {
-//        this.put(product.getProductID(), product);
-//    }
     public void removeProduct(Product product) {
-        this.remove(product.getProductID);
+        this.remove(product.getProductID());
     }
 
     public void updateProductQuantity(Product product, int quantity) {
@@ -102,6 +93,7 @@ public class ShoppingCart extends HashMap<String, Product> {
     }
 
     public double calculateTotalPrice() {
+        totalPrice = 0;
         for (Product product : toList()) {
             totalPrice += product.getPrice() * product.getQuantity();
         }
@@ -113,8 +105,39 @@ public class ShoppingCart extends HashMap<String, Product> {
         List<Product> l = toList();
         System.out.println("Cart Items:");
         for (Product product : l) {
-            if(user.equals(product.getUser()))
+            if (user.equals(product.getUser()))
                 System.out.println(product.getProductName() + " - Quantity: " + product.getQuantity() + " - Price: $" + product.getPrice() * product.getQuantity());
+        }
+    }
+
+    public boolean validateCart() {
+        return !this.isEmpty();
+    }
+
+    public void checkout() {
+        if (validateCart()) {
+            double totalPrice = calculateTotalPrice();
+            System.out.println("Checkout completed. Total price: $" + totalPrice);
+            // Thực hiện các bước thanh toán khác nếu cần
+            // Xóa danh sách sản phẩm trong giỏ hàng sau khi đã thanh toán
+            this.clear();
+            // Ghi danh sách sản phẩm sau khi đã xóa vào tệp tin
+            writeProductToCartList();
+        } else {
+            System.out.println("No items in cart. Cannot proceed to checkout.");
+        }
+    }
+
+    public void viewCart() {
+        if (validateCart()) {
+            System.out.println("Cart items:");
+            for (Product product : toList()) {
+                System.out.println(product.getProductName() + " - Quantity: " + product.getQuantity() + " - Price: $" + product.getPrice() * product.getQuantity());
+            }
+            double totalPrice = calculateTotalPrice();
+            System.out.println("Total price: $" + totalPrice);
+        } else {
+            System.out.println("Cart is empty.");
         }
     }
 }
