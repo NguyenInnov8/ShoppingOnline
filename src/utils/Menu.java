@@ -68,6 +68,13 @@ public class Menu {
     public void register() {
         System.out.println("==== Register ====");
         userList.registerUser();
+<<<<<<< HEAD
+=======
+        do {
+            System.out.println("Press 1 to back to main menu ");
+        } while(!"1".equals(MyUtils.inputString("Enter: ")));
+
+>>>>>>> d16fb037fcdee9c971b1b626d2429048b3e9bb31
     }
 
     public void login() {
@@ -117,12 +124,24 @@ public class Menu {
                     displayAllProducts();
                     break;
                 case 2:
+<<<<<<< HEAD
                     displayAddProductToCart();
                     break;
                 case 3:
                     displayCartItem();
                     break;
+=======
+                    addProductToCart();
+                    break;
+                case 3:
+                    cartMenu();
+                    displayAddProductToCart();
+                    break;
+>>>>>>> d16fb037fcdee9c971b1b626d2429048b3e9bb31
                 case 4:
+                    displayCartItem();
+                    break;
+                case 5:
                     exit = true;
                     userMenu();
                     break;
@@ -141,9 +160,26 @@ public class Menu {
     }
 
     public void displayAllProducts() {
+<<<<<<< HEAD
         prdList.readFromProductList();
         prdList.displayAll();
     }
+=======
+        System.out.println("==== All Products ====");
+        // Implement logic to display all products in the shop
+    }
+
+    public void addProductToCart() {
+        System.out.println("==== Add Product to Cart ====");
+        // Implement logic to add a product to the cart
+    }
+
+    public void cartMenu() {
+        System.out.println("==== Cart Menu ====");
+        // Implement logic for the cart menu
+    }
+     
+>>>>>>> d16fb037fcdee9c971b1b626d2429048b3e9bb31
     
     public void displayAddProductToCart() {
         displayAllProducts();
