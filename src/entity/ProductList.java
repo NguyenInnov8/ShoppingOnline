@@ -7,6 +7,7 @@ package entity;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,6 +18,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,10 +30,9 @@ public class ProductList extends HashMap<String, Product> {
 
     private String header = "----------------------------------------------------------------------------\n"+
                             "| Code     | Product name         | Quantity | Price | Sold Quantity | Rate |\n"+
-                            "|----------|----------------------|----------|-------|---------------|------|\n";
+                            "|----------|----------------------|----------|-------|---------------|------|";
     private String footer = "----------------------------------------------------------------------------";
     private final static String productFile = "src\\data\\productList.txt";
-
     public List<Product> toList() {
         return new ArrayList<>(this.values());
     }
@@ -52,10 +54,14 @@ public class ProductList extends HashMap<String, Product> {
         this.remove(productID);
     }
 
-    public void writeProductToList() throws IOException {
+    public void writeProductToList() {
         File file = new File(productFile);
         if (!file.exists()) {
-            file.createNewFile();
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(ProductList.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         try (OutputStream os = new FileOutputStream(file);
@@ -64,9 +70,12 @@ public class ProductList extends HashMap<String, Product> {
                 oos.writeObject(product);
             }
         }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public void readFromProductList() throws IOException, ClassNotFoundException {
+    public void readFromProductList() {
         File file = new File(productFile);
         if (!file.exists()) {
             return;
@@ -80,8 +89,14 @@ public class ProductList extends HashMap<String, Product> {
                     this.put(product.getProductID(), product);
                 } catch (EOFException e) {
                     break;
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ProductList.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProductList.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProductList.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -115,15 +130,6 @@ public class ProductList extends HashMap<String, Product> {
 
     public boolean isProductIDExist(String productID) {
         return this.containsKey(productID);
-    }
-
-    public void showAll() {
-    System.out.println(header);
-    for (Map.Entry<String, Product> entry : this.entrySet()) {
-        Product product = entry.getValue();
-        System.out.println(product);
-        }
-    System.out.println(footer);
     }
     
     public void sortBySoldQuantity() {

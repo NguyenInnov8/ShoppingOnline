@@ -4,6 +4,8 @@
  */
 package utils;
 
+import entity.ProductList;
+import entity.ShoppingCart;
 import entity.User;
 import entity.UserList;
 import java.io.IOException;
@@ -16,6 +18,8 @@ public class Menu {
     private boolean exit = false;
     private static User currentUser;
     private UserList userList = new UserList();
+    private ProductList prdList = new ProductList();
+    private ShoppingCart sCart = new ShoppingCart();
 
     public final static void clearConsole() {
         for (int i = 0; i < 50; i++) {
@@ -39,7 +43,6 @@ public class Menu {
             int choice = MyUtils.inputInteger("Enter your choice", 1, 3);
             switch (choice) {
                 case 1:
-                    clearConsole();
                     userMenu();
                     break;
                 case 2:
@@ -69,7 +72,8 @@ public class Menu {
 
     public void login() {
         System.out.println("==== Login ====");
-        if (userList.loginUser() == null) {
+        currentUser = userList.loginUser();
+        if (currentUser == null) {
             System.out.println("Your username or password is incorrect. Please enter again or create a new one.");
             displayUserMainMenu();
         } else {
@@ -114,14 +118,15 @@ public class Menu {
                     displayAllProducts();
                     break;
                 case 2:
-                    // Implement add product to cart logic here
+                    displayAddProductToCart();
                     break;
                 case 3:
-                    // Implement cart menu logic here
+                    displayCartItem();
                     break;
                 case 4:
                     exit = true;
                     System.out.println("Returning to the main menu.");
+                    mainMenu();
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -133,12 +138,27 @@ public class Menu {
         System.out.println("==== Shop Menu ====");
         System.out.println("1. See All Products");
         System.out.println("2. Add Product to Cart");
-        System.out.println("3. Cart Menu");
+        System.out.println("3. Cart View");
         System.out.println("4. Go Back");
     }
 
     public void displayAllProducts() {
-        // Implement logic to display all products in the shop
+        prdList.readFromProductList();
+        prdList.displayAll();
     }
-
+    
+    public void displayAddProductToCart() {
+        displayAllProducts();
+        String prdID = MyUtils.inputString("Enter Product ID of the Product you want to add: ");
+        int quantity = MyUtils.inputInteger("Enter Quantity: ", 1, Integer.MAX_VALUE);
+        addProductToCart(prdID, quantity);
+    }
+    
+    public void displayCartItem() {
+        sCart.displayCartItems(currentUser);
+    }
+    
+    public void addProductToCart(String prdID, int quantity) {
+        sCart.addProductToCart(currentUser, prdID, quantity);
+    }
 }
