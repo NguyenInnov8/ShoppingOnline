@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entity;
 
 import java.io.EOFException;
@@ -33,9 +29,8 @@ public class ShoppingCart extends HashMap<String, Product> {
     }
 
     public void writeProductToCartList() {
-        try (FileOutputStream os = new FileOutputStream(productInCartFile);
-             ObjectOutputStream oos = new ObjectOutputStream(os)) {
-
+        try (FileOutputStream fos = new FileOutputStream(productInCartFile);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             for (Product prd : toList()) {
                 oos.writeObject(prd);
             }
@@ -51,21 +46,19 @@ public class ShoppingCart extends HashMap<String, Product> {
             System.out.println("File cannot be read");
             return;
         }
-        try (FileInputStream is = new FileInputStream(productInCartFile);
-             ObjectInputStream ois = new ObjectInputStream(is)) {
+        try (FileInputStream fis = new FileInputStream(productInCartFile);
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
             this.clear();
             while (true) {
                 try {
                     Product prd = (Product) ois.readObject();
                     this.put(prd.getProductID(), prd);
                 } catch (EOFException e) {
-                    break; // Break the loop when EOFException occurs
+                    break;
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
-        } catch (EOFException e) {
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,10 +79,12 @@ public class ShoppingCart extends HashMap<String, Product> {
 
     public void removeProduct(Product product) {
         this.remove(product.getProductID());
+        writeProductToCartList();
     }
 
     public void updateProductQuantity(Product product, int quantity) {
         product.setQuantity(quantity);
+        writeProductToCartList();
     }
 
     public double calculateTotalPrice() {
@@ -118,10 +113,7 @@ public class ShoppingCart extends HashMap<String, Product> {
         if (validateCart()) {
             double totalPrice = calculateTotalPrice();
             System.out.println("Checkout completed. Total price: $" + totalPrice);
-            // Thực hiện các bước thanh toán khác nếu cần
-            // Xóa danh sách sản phẩm trong giỏ hàng sau khi đã thanh toán
             this.clear();
-            // Ghi danh sách sản phẩm sau khi đã xóa vào tệp tin
             writeProductToCartList();
         } else {
             System.out.println("No items in cart. Cannot proceed to checkout.");
