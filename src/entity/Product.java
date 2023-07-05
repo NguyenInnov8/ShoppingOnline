@@ -5,8 +5,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
-public class Product implements Serializable {
+/**
+ *
+ * @author ASUS
+ */
+public class Product implements Serializable, Comparable {
+
     private static final long serialVersionUID = 7247210392003788145L;
     private String productID;
     private String productName;
@@ -15,6 +21,7 @@ public class Product implements Serializable {
     private int soldQuantity;
     private String shopId;
     private double rating;
+    private User user = null;
     public int getProductID;
 
     public Product() {
@@ -76,8 +83,8 @@ public class Product implements Serializable {
 
     public void setShopId(String shopId) {
         this.shopId = shopId;
-    }
-
+    }    
+    
     public double getRating() {
         return rating;
     }
@@ -85,11 +92,46 @@ public class Product implements Serializable {
     public void setRating(double rating) {
         this.rating = rating;
     }
+    
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
+    public User getUser() {
+        return this.user;
+    }
 
     @Override
     public String toString() {
-        return String.format("|%6s|%-25s|%5d|%6.1f|%6d|%6s|%6.1f",
+        return String.format("|%6s|%-22s|%-10d|%-7.1f|%-15d|%-6.1f|",
                 this.productID, this.productName, this.quantity,
-                this.price, this.soldQuantity, this.shopId, this.rating);
+                this.price, this.soldQuantity, this.rating);
     }
+
+    @Override
+    public int compareTo(Object o) {
+        Product toComaprePrd = (Product) o;
+        if (this.soldQuantity == toComaprePrd.soldQuantity) {
+            return 0;
+        } else if (this.soldQuantity > toComaprePrd.soldQuantity) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    public static Comparator<Product> compareByRatingStar = new Comparator<Product>() {
+        @Override
+        public int compare(Product o1, Product o2) {
+            // Reverse the comparison by switching the order of o1 and o2
+            if (o1.rating == o2.rating) {
+                return 0;
+            } else if (o1.rating > o2.rating) {
+                return -1; // Return -1 instead of 1 to sort in descending order
+            } else {
+                return 1; // Return 1 instead of -1 to sort in descending order
+            }
+        }
+    };
+
 }
