@@ -4,6 +4,7 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/ShoppingCart.java</file>
+            <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/data/productInCart.txt</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/User.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/management/BillManagementImpl.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/management/BillManagement.java</file>
@@ -12,7 +13,6 @@
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/Product.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/management/ProductManagement.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/ProductList.java</file>
-            <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/validate/Validation.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/Bill.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/management/ProductManagementImpl.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/utils/MyUtils.java</file>

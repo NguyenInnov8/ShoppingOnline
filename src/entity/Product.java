@@ -103,9 +103,9 @@ public class Product implements Serializable, Comparable {
 
     @Override
     public String toString() {
-        return String.format("|%6s|%-25s|%5d|%6.1f|%6d|%6s|%6.1f",
+        return String.format("|%6s|%-22s|%-10d|%-7.1f|%-15d|%-6.1f|",
                 this.productID, this.productName, this.quantity,
-                this.price, this.soldQuantity, this.shopId, this.rating);
+                this.price, this.soldQuantity, this.rating);
     }
 
     @Override

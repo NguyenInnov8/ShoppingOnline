@@ -62,7 +62,7 @@ public class Menu {
         System.out.println("==== Main Menu ====");
         System.out.println("1. Register");
         System.out.println("2. Login");
-        System.out.println("3. Logout");
+        System.out.println("3. Back to the Identification");
     }
 
     public void register() {
@@ -75,7 +75,6 @@ public class Menu {
         currentUser = userList.loginUser();
         if (currentUser == null) {
             System.out.println("Your username or password is incorrect. Please enter again or create a new one.");
-            displayUserMainMenu();
         } else {
             shopMenu();
         }
@@ -100,7 +99,7 @@ public class Menu {
                     login();
                     break;
                 case 3:
-                    logout();
+                    mainMenu();
                     break;
             }
         }
@@ -125,8 +124,7 @@ public class Menu {
                     break;
                 case 4:
                     exit = true;
-                    System.out.println("Returning to the main menu.");
-                    mainMenu();
+                    userMenu();
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -139,7 +137,7 @@ public class Menu {
         System.out.println("1. See All Products");
         System.out.println("2. Add Product to Cart");
         System.out.println("3. Cart View");
-        System.out.println("4. Go Back");
+        System.out.println("4. Log out");
     }
 
     public void displayAllProducts() {

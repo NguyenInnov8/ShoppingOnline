@@ -29,8 +29,8 @@ public class ProductList extends HashMap<String, Product> {
     private static final long serialVersionUID = 1L;
 
     private String header = "----------------------------------------------------------------------------\n"+
-                            "| Code     | Product name         | Quantity | Price | Sold Quantity | Rate |\n"+
-                            "|----------|----------------------|----------|-------|---------------|------|";
+                            "| Code    | Product name         | Quantity | Price | Sold Quantity | Rate |\n"+
+                            "|---------|----------------------|----------|-------|---------------|------|";
     private String footer = "----------------------------------------------------------------------------";
     private final static String productFile = "src\\data\\productList.txt";
     public List<Product> toList() {

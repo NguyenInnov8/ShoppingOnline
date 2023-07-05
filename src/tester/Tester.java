@@ -21,10 +21,9 @@ import utils.Menu;
  */
 public class Tester {
     public static void main(String[] args){
-            Product prd2 = new Product("PRD1003", "Bun Bo", 100, 20, 20, "PAAAA", 5.0);
-            Product prd3 = new Product("PRD1004", "Banh uot", 100, 20, 30, "PAAAA", 2.0);
-            Product prd4 = new Product("PRD1005", "Banh Mi", 100, 20, 10, "PAAAA", 3.0);
-
+            Product prd2 = new Product("prd100003", "Bun Bo", 100, 20, 20, "PAAAA", 5.0);
+            Product prd3 = new Product("prd100004", "Banh uot", 100, 20, 30, "PAAAA", 2.0);
+            Product prd4 = new Product("prd100005", "Banh Mi", 100, 20, 10, "PAAAA", 3.0);
             ProductList prdList= new ProductList();
             prdList.addProduct(prd2);
             prdList.addProduct(prd3);
