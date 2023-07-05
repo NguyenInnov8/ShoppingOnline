@@ -8,7 +8,7 @@ import entity.Product;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CartManagementImpl implements PurchaseManagement {
+public class CartManagementImpl implements CartManagement {
     private final Map<Product, Integer> cart;
     
     public CartManagementImpl() {
@@ -59,8 +59,6 @@ public class CartManagementImpl implements PurchaseManagement {
         if (validateCart()) {
             double totalPrice = calculateTotalPrice();
             System.out.println("Checkout completed. Total price: " + totalPrice);
-            // Thực hiện các bước thanh toán khác nếu cần
-            // ...
         } else {
             System.out.println("No items in cart. Cannot proceed to checkout.");
         }
@@ -82,6 +80,6 @@ public class CartManagementImpl implements PurchaseManagement {
 
     @Override
     public void addToCart(Product product) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        addToCart(product, 1);
     }
 }
