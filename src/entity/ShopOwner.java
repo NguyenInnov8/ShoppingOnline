@@ -7,8 +7,8 @@ public class ShopOwner extends User {
     private String shopName;
     private final List<Product> products;
 
-    public ShopOwner(String username, String password, String email, String shopName) {
-        super(username, password, email);
+    public ShopOwner(String username, String password, String fullname, String shopName) {
+        super(username, password, fullname);
         this.shopName = shopName;
         this.products = new ArrayList<>();
     }
