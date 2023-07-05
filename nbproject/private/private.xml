@@ -6,7 +6,10 @@
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/tester/Tester.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/entity/Product.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/entity/ProductList.java</file>
+            <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/entity/ShoppingCart.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/management/BillManagementImpl.java</file>
+            <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/data/productList.txt</file>
+            <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/utils/Menu.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/entity/Bill.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/entity/UserList.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/enums/EUserRole.java</file>
@@ -14,8 +17,8 @@
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/management/ProductManagementImpl.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/utils/MyUtils.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/entity/User.java</file>
-            <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/validate/Validation.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/management/ProductManagement.java</file>
+            <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/validate/Validation.java</file>
             <file>file:/E:/Project/Back-end/BEProject1/ShoppingOnline/src/management/BillManagement.java</file>
         </group>
     </open-files>

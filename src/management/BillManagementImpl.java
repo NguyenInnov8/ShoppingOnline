@@ -12,7 +12,7 @@ import entity.Bill;
  */
 
 
-public class BillManagementImpl extends BillManagement {
+public class BillManagementImpl implements  BillManagement {
     private final List<Bill> billList;
 
     public BillManagementImpl() {

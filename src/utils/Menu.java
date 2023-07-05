@@ -25,7 +25,7 @@ public class Menu {
         userList.registerUser();
         do {
             System.out.println("Press 1 to back to main menu ");
-        } while(MyUtils.inputString("Enter: ") != "1");
+        } while(!"1".equals(MyUtils.inputString("Enter: ")));
     }
 
     public void login() {
@@ -50,10 +50,10 @@ public class Menu {
                     displayAllProducts();
                     break;
                 case 2:
-                    // Implement add product to cart logic here
+                    addProductToCart();
                     break;
                 case 3:
-                    // Implement cart menu logic here
+                    cartMenu();
                     break;
                 case 4:
                     exit = true;
@@ -74,7 +74,17 @@ public class Menu {
     }
 
     public void displayAllProducts() {
+        System.out.println("==== All Products ====");
         // Implement logic to display all products in the shop
     }
 
+    public void addProductToCart() {
+        System.out.println("==== Add Product to Cart ====");
+        // Implement logic to add a product to the cart
+    }
+
+    public void cartMenu() {
+        System.out.println("==== Cart Menu ====");
+        // Implement logic for the cart menu
+    }
 }
