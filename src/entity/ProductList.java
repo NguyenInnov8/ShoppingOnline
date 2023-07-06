@@ -50,14 +50,14 @@ public class ProductList extends HashMap<String, Product> {
         }
     }
 
-    public void removeProduct(Product product) {
-        this.remove(product.getProductID);
+    public void removeProduct(String productId) {
+        this.remove(productId);
     }
 
-    public void updateProduct(int productId, Product updatedProduct) {
+    public void updateProduct(String productId, Product updatedProduct) {
        boolean found = false;
         for (Product product : this.toList()) {
-            if (product.getProductID == productId) {
+            if (product.getProductID().equals(productId)) {
                 product.setProductName(updatedProduct.getProductName());
                 product.setQuantity(updatedProduct.getQuantity());
                 product.setPrice(updatedProduct.getPrice());

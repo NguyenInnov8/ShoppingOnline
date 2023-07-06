@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.List;
 import utils.MyUtils;
@@ -76,7 +77,7 @@ public class ShopOwnerList extends ArrayList<ShopOwner> {
         return null;
     }
 
-    public void registerUser() {
+    public void registerShopOwner() {
         readFromShopList();
         String username = "";
         String password = "";
@@ -99,5 +100,34 @@ public class ShopOwnerList extends ArrayList<ShopOwner> {
      
         this.writeToShopList();
         System.out.println("Register Successfully! Please back to the main menu to login");
+    }
+    
+       public void addProductToShop(Product product) {
+        readFromShopList(); 
+        prdList.addProduct(product);
+        writeToShopList(); 
+        System.out.println("Product added to the shop: " + product.getProductName());
+    } 
+
+
+
+    public void updateProductInShop(Product product) {
+         readFromShopList(); 
+         for (int i = 0; i < prdList.size(); i++) {
+            if (prdList.get(i).getProductID().equals(product.getProductID())) {
+                prdList.toList().set(i, product); 
+                writeToShopList();
+                System.out.println("Product updated in the shop: " + product.getProductName());
+                return;
+             }
+         }
+         System.out.println("Product not found in the shop.");
+        }
+    
+    public void showAllShopOwner() {
+        this.readFromShopList();
+        for (ShopOwner shopowner : this) {
+            System.out.println(shopowner);
+        }
     }
 }

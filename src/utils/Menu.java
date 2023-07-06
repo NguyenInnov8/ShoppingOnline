@@ -1,22 +1,18 @@
 package utils;
 
-import entity.OwnerList;
-import entity.Owner;
-import entity.ProductList;
-import entity.ShoppingCart;
-import entity.User;
-import entity.UserList;
-import java.util.ArrayList;
-public class Menu {
+import entity.*;
+import static java.lang.System.out;
+import java.util.List;
 
+public class Menu {
     private boolean exit = false;
     private static User currentUser;
-    private static Owner currentOwner;
-    private UserList userList = new UserList();
-    private OwnerList ownerList = new OwnerList();
-    private ProductList prdList = new ProductList();
-    private ShoppingCart sCart = new ShoppingCart();
-
+    private static ShopOwner currentOwner;
+    private final UserList userList = new UserList();
+    private final ProductList productList = new ProductList();
+    private final ShoppingCart shoppingCart = new ShoppingCart();
+    private final ShopOwnerList shopownerList = new ShopOwnerList();
+    
     public final static void clearConsole() {
         for (int i = 0; i < 50; i++) {
             System.out.println("");
@@ -39,10 +35,10 @@ public class Menu {
             int choice = MyUtils.inputInteger("Enter your choice", 1, 3);
             switch (choice) {
                 case 1:
-                    userLogin();
+                    userMenu();
                     break;
                 case 2:
-                    shopLogin();
+                    shopMenu();
                     break;
                 case 3:
                     System.out.println("Thanks for visiting us");
@@ -54,7 +50,7 @@ public class Menu {
         }
     }
 
-    public void displayUserMainLogin() {
+    public void displayUserMainMenu() {
         System.out.println("==== Main Menu ====");
         System.out.println("1. Register");
         System.out.println("2. Login");
@@ -75,7 +71,7 @@ public class Menu {
         if (currentUser == null) {
             System.out.println("Your username or password is incorrect. Please enter again or create a new one.");
         } else {
-            userMenu();
+//            userLoggedInMenu();
         }
     }
 
@@ -85,67 +81,6 @@ public class Menu {
         mainMenu();
     }
 
-    public void displayUserMainMenu() {
-        System.out.println("==== Main Menu ====");
-        System.out.println("1. Show Store List");
-        System.out.println("2. View Cart");
-        System.out.println("3. Logout");
-    }
-    
-    public void ShowStoreList() {
-       System.out.println("=== Store List ===");
-
-       // Lấy danh sách cửa hàng từ nguồn dữ liệu
-       ArrayList<Owner> stores = currentOwner.getShop().getStoreList();
-
-       // Kiểm tra xem có cửa hàng nào trong danh sách hay không
-       if (stores.isEmpty()) {
-       System.out.println("There are no stores available.");
-       } else {
-        // Hiển thị danh sách cửa hàng
-        for (Store store : stores) {
-            System.out.println(store.getName());
-           }
-        }
-    }
-
-    public void ViewCart() {
-       System.out.println("=== View Cart ===");
-
-       // Lấy thông tin giỏ hàng từ nguồn dữ liệu
-       ArrayList<CartItem> items = sCart.getItems();
-
-       // Kiểm tra xem giỏ hàng có sản phẩm nào hay không
-       if (items.isEmpty()) {
-          System.out.println("Your cart is empty.");
-       } else {
-       // Hiển thị thông tin giỏ hàng
-       for (CartItem item : items) {
-            System.out.println(item.getProduct().getName() + " - Quantity: " + item.getQuantity());
-            }
-       }
-    }
-
-    public void userLogin() {
-        exit = false;
-        while (!exit) {
-            displayUserMainLogin();
-            int choice = MyUtils.inputInteger("Please enter your choice", 1, 3);
-
-            switch (choice) {
-                case 1:
-                    ShowStoreList();
-                    break;
-                case 2:
-                    ViewCart();
-                    break;
-                case 3:
-                    logoutUser();
-                    break;
-            }
-        }
-    }
-    
     public void userMenu() {
         exit = false;
         while (!exit) {
@@ -165,34 +100,14 @@ public class Menu {
             }
         }
     }
-    
-//    -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     public void registerOwner() {
-        System.out.println("==== Register ====");
-        ownerList.registerOwner();
-        do {
-            System.out.println("Press 1 to back to main menu ");
-        } while (!"1".equals(MyUtils.inputString("Enter: ")));
-    }
 
-    public void loginOwner() {
-        System.out.println("==== Login ====");
-        currentOwner = ownerList.loginOwner();
-        if (currentOwner == null) {
-            System.out.println("Your username or password is incorrect. Please enter again or create a new one.");
-        } else {
-            shopLogin();
-        }
-    }
-    public void logoutOwner() {
-        System.out.println("==== Logout ====");
-        currentOwner = null;
-        mainMenu();
-    }
-    public void shopLogin() {
-         exit = false;
+
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void shopMenu() {
+        exit = false;
         while (!exit) {
-            displayUserMainLogin();
+            displayShopMainMenu();
             int choice = MyUtils.inputInteger("Please enter your choice", 1, 3);
 
             switch (choice) {
@@ -209,4 +124,124 @@ public class Menu {
         }
     }
 
+    
+    public void displayShopMainMenu() {
+        System.out.println("==== Shop Menu ====");
+        System.out.println("1. Register");
+        System.out.println("2. Login");
+        System.out.println("3. Logout");
+    }
+
+    public void registerOwner() {
+        System.out.println("==== Register ====");
+        shopownerList.registerShopOwner();
+    }
+
+    public void loginOwner() {
+        System.out.println("==== Login ====");
+        currentOwner = shopownerList.loginShopOwner();
+        if (currentOwner == null) {
+            System.out.println("Your username or password is incorrect. Please enter again or create a new one.");
+        } else {
+            shopLoggedInMenu();
+        }
+    }
+
+    public void logoutOwner() {
+        System.out.println("==== Logout ====");
+        currentOwner = null;
+        mainMenu();
+    }
+
+    public void shopLoggedInMenu() {
+        exit = false;
+        while (!exit) {
+            displayShopLoggedInMenu();
+            int choice = MyUtils.inputInteger("Please enter your choice", 1, 5);
+
+            switch (choice) {
+                case 1:
+                    showProduct();
+                    break;
+                case 2:
+                    addProductToShop();
+                    break;
+                case 3:
+                    removeProductFromShop();
+                    break;
+                case 4:
+                    updateProductInShop();
+                    break;
+                case 5: 
+                    shopMenu();
+                    break;
+                                        
+            }
+        }
+    }
+
+    public void displayShopLoggedInMenu() {
+        System.out.println("==== Owner ====");
+        System.out.println("1. Show Product");
+        System.out.println("2. Add Product to Shop");
+        System.out.println("3. Remove Product from Shop");
+        System.out.println("4. Update Product in Shop");
+        System.out.println("5. Logout");
+    }
+    
+    public void  showProduct(){
+        System.out.println("==== Show Product in Shop ====");
+        productList.readFromProductList();
+        List<Product> product = productList.toList();
+        for(Product prd: product){
+            if (prd.getShopowner().equals(currentOwner))
+                System.out.println(prd);
+            else {
+                System.out.println("There are no stores available");
+            }
+        }     
+    }
+    
+    public void addProductToShop() {
+         System.out.println("==== Add Product to Shop ====");
+         String productName = MyUtils.inputString("Enter product name: ");
+         double price = (double)MyUtils.inputInteger("Enter product price:",0,Integer.MAX_VALUE);
+         int quantity = MyUtils.inputInteger("Enter product quantity:",0,Integer.MAX_VALUE);
+         double rating = 0.0;
+         int soldQuantity = 0;
+         
+         Product product = new Product(productName, productName, quantity, price, soldQuantity, rating, currentOwner);
+         
+         productList.readFromProductList();
+         productList.addProduct(product);
+         productList.writeProductToList();
+
+         System.out.println("Product added to the shop");
+    }
+
+    public void removeProductFromShop() {
+        System.out.println("==== Remove Product from Shop ====");
+        String productID = MyUtils.inputString("Enter product ID to remove: ");
+        
+        productList.readFromProductList();
+        for(Product prd: productList.toList())
+        {
+            if(prd.getProductID().equals(productID) && prd.getShopowner().equals(currentOwner))
+                productList.removeProduct(productID);
+            else 
+                System.out.println("Product not found in the shop");
+        }
+    }
+
+    public void updateProductInShop() {
+        System.out.println("==== Update Product in Shop ====");
+        String productID = MyUtils.inputString("Enter product ID to update: ");
+        productList.readFromProductList();
+        for(Product prd: productList.toList())
+            if(prd.getProductID().equals(productID) && prd.getShopowner().equals(currentOwner))
+                productList.updateProduct(productID, prd);
+         else {
+            System.out.println("Product not found in the shop.");
+        }
+    }
 }
