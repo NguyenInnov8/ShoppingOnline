@@ -10,11 +10,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validation {
-    private static final UserList list = new UserList();
+    private static final UserList listUser = new UserList();
     private static final ProductList prdList = new ProductList();
 
     public static boolean isValidUsername(String username) {
-        System.out.println("Username Error:");
         int minLenUsername = 5;
         int maxLenUsername = 20;
 
@@ -33,11 +32,10 @@ public class Validation {
             return false;
         }
 
-        if (isDuplicateUsername(username, list)) {
+        if (isDuplicateUsername(username, listUser)) {
             System.out.println("This Username has existed. Please choose another username");
             return false;
         }
-
         char[] usernameChar = username.trim().toCharArray();
         int usernameCharLen = usernameChar.length;
         int currentPosition = 0;
@@ -262,4 +260,6 @@ public class Validation {
         }
         return true;
     }
+
+   
 }

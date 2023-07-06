@@ -23,11 +23,12 @@ public class Product implements Serializable, Comparable {
     private double rating;
     private User user = null;
     public int getProductID;
+    private ShopOwner shopowner = null;
 
     public Product() {
     }
 
-    public Product(String productID, String productName, int quantity, double price, int soldQuantity, String shopId, double rating) {
+    public Product(String productID, String productName, int quantity, double price, int soldQuantity, String shopId, double rating, ShopOwner shopowner) {
         this.productID = productID;
         this.productName = productName;
         this.quantity = quantity;
@@ -35,6 +36,7 @@ public class Product implements Serializable, Comparable {
         this.soldQuantity = soldQuantity;
         this.shopId = shopId;
         this.rating = rating;
+        this.shopowner = shopowner;
     }
 
     public String getProductID() {
@@ -99,6 +101,14 @@ public class Product implements Serializable, Comparable {
     
     public User getUser() {
         return this.user;
+    }
+
+    public ShopOwner getShopowner() {
+        return shopowner;
+    }
+
+    public void setShopowner(ShopOwner shopowner) {
+        this.shopowner = shopowner;
     }
 
     @Override

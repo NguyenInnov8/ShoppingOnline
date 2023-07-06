@@ -15,8 +15,8 @@ public class ShopOwner extends User {
     private final List<Product> products;
     private static final String shopListFile = "src\\data\\shopList.txt";
 
-    public ShopOwner(String username, String password, String email, String shopName) {
-        super(username, password, email);
+    public ShopOwner(String username, String password, String shopName) {
+        super(username, password, shopName);
         this.shopName = shopName;
         this.products = new ArrayList<>();
     }
@@ -29,8 +29,8 @@ public class ShopOwner extends User {
         this.shopName = shopName;
     }
     
-    public void writeToShopList(String filePath) {
-      try (FileOutputStream fos = new FileOutputStream(filePath);
+    public void writeToShopList() {
+      try (FileOutputStream fos = new FileOutputStream(shopListFile);
          ObjectOutputStream oos = new ObjectOutputStream(fos)) {
         for (Product product : products) {
             oos.writeObject(product);
@@ -41,13 +41,13 @@ public class ShopOwner extends User {
       }
     }  
 
-   public void readFromShopList(String filePath) {
+   public void readFromShopList() {
     File f = new File(shopListFile);
         if (!f.canRead()) {
             System.out.println("File cannot be read");
             return;
         }
-    try (FileInputStream fis = new FileInputStream(filePath);
+    try (FileInputStream fis = new FileInputStream(shopListFile);
          ObjectInputStream ois = new ObjectInputStream(fis)) {
         products.clear();
         while (true) {
@@ -66,16 +66,16 @@ public class ShopOwner extends User {
 }
 
    public void addProductToShop(Product product) {
-        readFromShopList(shopListFile); 
+        readFromShopList(); 
         products.add(product);
-        writeToShopList(shopListFile); 
+        writeToShopList(); 
         System.out.println("Product added to the shop: " + product.getProductName());
     } 
 
     public void removeProductFromShop(Product product) {
-         readFromShopList(shopListFile);
+         readFromShopList();
          if (products.remove(product)) {
-              writeToShopList(shopListFile); 
+              writeToShopList(); 
               System.out.println("Product removed from the shop: " + product.getProductName());
          } else {
               System.out.println("Product not found in the shop.");
@@ -83,11 +83,11 @@ public class ShopOwner extends User {
     }
 
     public void updateProductInShop(Product product) {
-         readFromShopList(shopListFile); 
+         readFromShopList(); 
          for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getProductID().equals(product.getProductID())) {
                 products.set(i, product);
-                writeToShopList(shopListFile);
+                writeToShopList();
                 System.out.println("Product updated in the shop: " + product.getProductName());
                 return;
              }

@@ -27,6 +27,7 @@ import java.util.logging.Logger;
  */
 public class ProductList extends HashMap<String, Product> {
     private static final long serialVersionUID = 1L;
+    private final Map<String, List<Integer>> productRatings = new HashMap<>();
 
     private String header = "----------------------------------------------------------------------------\n"+
                             "| Code    | Product name         | Quantity | Price | Sold Quantity | Rate |\n"+
@@ -49,11 +50,47 @@ public class ProductList extends HashMap<String, Product> {
         }
     }
 
-
-    public void removeProduct(String productID) {
-        this.remove(productID);
+    public void removeProduct(Product product) {
+        this.remove(product.getProductID);
     }
 
+    public void updateProduct(int productId, Product updatedProduct) {
+       boolean found = false;
+        for (Product product : this.toList()) {
+            if (product.getProductID == productId) {
+                product.setProductName(updatedProduct.getProductName());
+                product.setQuantity(updatedProduct.getQuantity());
+                product.setPrice(updatedProduct.getPrice());
+                product.setSoldQuantity(updatedProduct.getSoldQuantity());
+                product.setRating(updatedProduct.getRating());
+                found = true;
+                System.out.println("Product updated successfully.");
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Product not found. Update failed.");
+        }
+    }
+    
+    public void rateProduct(String productId, int rating) {
+        List<Integer> ratings = productRatings.getOrDefault(productId, new ArrayList<>());
+        ratings.add(rating);
+        productRatings.put(productId, ratings);
+    }
+
+    public double getProductAverageRating(String productId) {
+        List<Integer> ratings = productRatings.getOrDefault(productId, new ArrayList<>());
+        if (ratings.isEmpty()) {
+            return 0;
+        } else {
+            int sum = 0;
+            for (int rating : ratings) {
+                sum += rating;
+            }
+            return (double) sum / ratings.size();
+        }
+    }
     public void writeProductToList() {
         File file = new File(productFile);
         if (!file.exists()) {
