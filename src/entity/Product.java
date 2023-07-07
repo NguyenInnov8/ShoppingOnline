@@ -5,7 +5,9 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  *
@@ -19,9 +21,9 @@ public class Product implements Serializable, Comparable {
     private int quantity;
     private double price;
     private int soldQuantity;
+    private List<Integer> allRating = new ArrayList<>();
     private double rating;
     private User user = null;
-    public int getProductID;
     private ShopOwner shopowner = null;
 
     public Product() {
@@ -94,13 +96,23 @@ public class Product implements Serializable, Comparable {
     }
 
     public ShopOwner getShopowner() {
-        return shopowner;
+        return this.shopowner;
     }
 
     public void setShopowner(ShopOwner shopowner) {
         this.shopowner = shopowner;
     }
 
+    public List<Integer> getAllRating() {
+        return allRating;
+    }
+
+    public void setAllRating(int rating) {
+        this.allRating.add(rating);
+    }
+
+    
+    
     @Override
     public String toString() {
         return String.format("|%6s|%-22s|%-10d|%-7.1f|%-15d|%-6.1f|",
@@ -108,17 +120,18 @@ public class Product implements Serializable, Comparable {
                 this.price, this.soldQuantity, this.rating);
     }
 
-    @Override
+   @Override
     public int compareTo(Object o) {
-        Product toComaprePrd = (Product) o;
-        if (this.soldQuantity == toComaprePrd.soldQuantity) {
-            return 0;
-        } else if (this.soldQuantity > toComaprePrd.soldQuantity) {
-            return 1;
-        } else {
-            return -1;
-        }
+    Product toComaprePrd = (Product) o;
+    if (this.soldQuantity == toComaprePrd.soldQuantity) {
+        return 0;
+    } else if (this.soldQuantity > toComaprePrd.soldQuantity) {
+        return 1;
+    } else {
+        return -1;
     }
+}
+
 
     public static Comparator<Product> compareByRatingStar = new Comparator<Product>() {
         @Override

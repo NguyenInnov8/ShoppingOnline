@@ -33,7 +33,7 @@ public class ProductList extends HashMap<String, Product> {
                             "| Code    | Product name         | Quantity | Price | Sold Quantity | Rate |\n"+
                             "|---------|----------------------|----------|-------|---------------|------|";
     private String footer = "----------------------------------------------------------------------------";
-    private final static String productFile = "src\\data\\productList.txt";
+    private final static String productFile = "src\\data\\productLists.txt";
     public List<Product> toList() {
         return new ArrayList<>(this.values());
     }
@@ -42,6 +42,15 @@ public class ProductList extends HashMap<String, Product> {
         this.put(product.getProductID(), product);
     }
 
+    public Product getProduct(String productname) {
+        readFromProductList();
+        for (Product product: toList()) {
+            if(product.getProductName().equals(productname)) {
+                return product;
+            }
+        }
+        return null;
+    }
     
     public void showAll(List<Product> l) {
         System.out.println(header);
@@ -74,21 +83,28 @@ public class ProductList extends HashMap<String, Product> {
     }
     
     public void rateProduct(String productId, int rating) {
-        List<Integer> ratings = productRatings.getOrDefault(productId, new ArrayList<>());
-        ratings.add(rating);
-        productRatings.put(productId, ratings);
+        readFromProductList();
+        List<Integer> allRate = new ArrayList();
+        for (Product product: toList()) {
+            if(productId.equals(product.getProductID())) {
+                product.setAllRating(rating);
+                allRate = product.getAllRating();
+                product.setRating(getProductAverageRating(allRate));
+                break;
+            }
+        }
+        writeProductToList();
     }
 
-    public double getProductAverageRating(String productId) {
-        List<Integer> ratings = productRatings.getOrDefault(productId, new ArrayList<>());
-        if (ratings.isEmpty()) {
+    public double getProductAverageRating(List<Integer> l) {
+        if (l.isEmpty()) {
             return 0;
         } else {
             int sum = 0;
-            for (int rating : ratings) {
+            for (int rating : l) {
                 sum += rating;
             }
-            return (double) sum / ratings.size();
+            return (double) sum / l.size();
         }
     }
     public void writeProductToList() {
@@ -130,7 +146,10 @@ public class ProductList extends HashMap<String, Product> {
                     Logger.getLogger(ProductList.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } catch (FileNotFoundException ex) {
+        } catch(EOFException ex) {
+            
+        }
+        catch (FileNotFoundException ex) {
             Logger.getLogger(ProductList.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ProductList.class.getName()).log(Level.SEVERE, null, ex);

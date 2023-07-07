@@ -20,10 +20,9 @@ import validate.Validation;
  *
  * @author ASUS
  */
-public class UserList extends ArrayList<User> implements Serializable {
+public class UserList extends ArrayList<User>{
 
-    private static final long serialVersionUID = 1L;
-    private static final String userFilePath = "src\\data\\userList.txt";
+    private static final String userFilePath = "src\\data\\users.txt";
 
     public void writeToUserList() {
         try (FileOutputStream os = new FileOutputStream(userFilePath);
@@ -57,7 +56,11 @@ public class UserList extends ArrayList<User> implements Serializable {
                     e.printStackTrace();
                 }
             }
-        } catch (IOException e) {
+        } catch (EOFException ex) {
+            
+        }
+        
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -7,14 +7,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ShoppingCart extends HashMap<String, Product> {
-
+public class ShoppingCart extends HashMap<String, Product> implements Serializable{
+    private final static long serialVersionUID = 4390163101870860443L;
     private final static String productInCartFile = "src\\data\\productInCart.txt";
     private ProductList prdList = new ProductList();
+    private ShopOwnerList sol = new ShopOwnerList();
     private double totalPrice = 0;
 
     public ShoppingCart() {
@@ -59,9 +61,22 @@ public class ShoppingCart extends HashMap<String, Product> {
                     e.printStackTrace();
                 }
             }
-        } catch (IOException e) {
+        } catch (EOFException ex) {
+            
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public Product getProduct(String productname) {
+        readFromProductCartList();
+        for (Product product: toList()) {
+            if(product.getProductName().equals(productname)) {
+                return product;
+            }
+        }
+        return null;
     }
 
     public void addProductToCart(User user, String productID, int quantity) {
@@ -77,57 +92,79 @@ public class ShoppingCart extends HashMap<String, Product> {
         writeProductToCartList();
     }
 
-    public void removeProduct(Product product) {
-        this.remove(product.getProductID());
+    public void removeProduct(String productID) {
+        readFromProductCartList();
+        this.remove(productID);
+        writeProductToCartList();
+    }
+    
+    public void purchaseProduct(List<Product> toPurchaseList) {
+        readFromProductCartList();
+        toPurchaseList = new ArrayList<>();
+        for (Product product : toPurchaseList) {
+            sol.updateQuantityInShopAfterPurchase(product.getQuantity(), product);
+            this.remove(product.getProductID());
+        }
         writeProductToCartList();
     }
 
-    public void updateProductQuantity(Product product, int quantity) {
-        product.setQuantity(quantity);
+    public void updateProductQuantity(String productName, int quantity) {
+        readFromProductCartList();
+        for (Product prd: this.toList()) {
+            if(prd.getProductName().equals(productName)) {
+                prd.setQuantity(quantity);
+            }
+        }
         writeProductToCartList();
     }
+    
+    
+    public int getProductInCartQuantity(String productName) {
+        int productInCartQuantity = 0;
+        prdList.readFromProductList();
+        for (Product prd: this.toList()) {
+            if(prd.getProductName().equals(productName)) {
+                productInCartQuantity = prd.getQuantity();
+            }
+        }
+        return productInCartQuantity;
+    }
 
-    public double calculateTotalPrice() {
+    public double calculateTotalPrice(User user) {
         totalPrice = 0;
         for (Product product : toList()) {
+            if(product.getUser().equals(user))
             totalPrice += product.getPrice() * product.getQuantity();
         }
         return totalPrice;
     }
 
-    public void displayCartItems(User user) {
-        readFromProductCartList();
-        List<Product> l = toList();
-        System.out.println("Cart Items:");
-        for (Product product : l) {
-            if (user.equals(product.getUser()))
-                System.out.println(product.getProductName() + " - Quantity: " + product.getQuantity() + " - Price: $" + product.getPrice() * product.getQuantity());
-        }
-    }
-
+    
     public boolean validateCart() {
         return !this.isEmpty();
     }
-
-    public void checkout() {
-        if (validateCart()) {
-            double totalPrice = calculateTotalPrice();
-            System.out.println("Checkout completed. Total price: $" + totalPrice);
-            this.clear();
-            writeProductToCartList();
-        } else {
-            System.out.println("No items in cart. Cannot proceed to checkout.");
+    
+    public boolean isEmp(User user) {
+        readFromProductCartList();
+        List<Product> l = new ArrayList<>();
+        for (Product prd: this.toList()) {
+            if(prd.getUser().equals(user))
+                l.add(prd);
         }
+        return l.isEmpty();
     }
 
-    public void viewCart() {
-        if (validateCart()) {
+    public void viewCart(User user) {
+        readFromProductCartList();
+        List<Product> l = toList();
+        if (!isEmp(user)) {
             System.out.println("Cart items:");
-            for (Product product : toList()) {
+            for (Product product : l) {
+                if(user.equals(product.getUser()))
                 System.out.println(product.getProductName() + " - Quantity: " + product.getQuantity() + " - Price: $" + product.getPrice() * product.getQuantity());
+                 double totalPrice = calculateTotalPrice(user);
+                System.out.println("Total price: $" + totalPrice);
             }
-            double totalPrice = calculateTotalPrice();
-            System.out.println("Total price: $" + totalPrice);
         } else {
             System.out.println("Cart is empty.");
         }

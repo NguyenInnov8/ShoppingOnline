@@ -1,20 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entity;
 
-import enums.EUserRole;
+import java.io.IOException;
+import java.io.InvalidClassException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- *
- * @author ADMIN
- */
-public class User implements Serializable{
+public class User implements Serializable {
+    public static final long serialVersionUID_v1 = -2752716689505898006L;
+    public static final long serialVersionUID_v2 = 4390163101870860443L;
+    
+    private static final long serialVersionUID = serialVersionUID_v2;
+
     private String username;
-    String password; 
+    private String password;
     private String fullname;
 
     public User() {
@@ -52,16 +51,16 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return "User{" + "username=" + username + ", password=" + password + ", fullname=" + fullname + '}';
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", fullname='" + fullname + '\'' +
+                '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 31 * hash + Objects.hashCode(this.username);
-        hash = 31 * hash + Objects.hashCode(this.password);
-        hash = 31 * hash + Objects.hashCode(this.fullname);
-        return hash;
+        return Objects.hash(username, password, fullname);
     }
 
     @Override
@@ -69,22 +68,25 @@ public class User implements Serializable{
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        if (!Objects.equals(this.username, other.username)) {
-            return false;
-        }
-        if (!Objects.equals(this.password, other.password)) {
-            return false;
-        }
-        return Objects.equals(this.fullname, other.fullname);
+        User other = (User) obj;
+        return Objects.equals(username, other.username) &&
+                Objects.equals(password, other.password) &&
+                Objects.equals(fullname, other.fullname);
     }
     
-    
-}
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
 
+        // Handle version compatibility
+        if (serialVersionUID == serialVersionUID_v1) {
+            // Perform necessary conversions or transformations for version 1
+        } else if (serialVersionUID == serialVersionUID_v2) {
+            // Perform necessary conversions or transformations for version 2
+        } else {
+            throw new InvalidClassException("Unsupported version of User class");
+        }
+    }
+}

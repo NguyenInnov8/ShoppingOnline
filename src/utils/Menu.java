@@ -2,9 +2,12 @@ package utils;
 
 import entity.*;
 import static java.lang.System.out;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Menu {
+
     private boolean exit = false;
     private static User currentUser;
     private static ShopOwner currentOwner;
@@ -12,7 +15,8 @@ public class Menu {
     private final ProductList productList = new ProductList();
     private final ShoppingCart shoppingCart = new ShoppingCart();
     private final ShopOwnerList shopownerList = new ShopOwnerList();
-    
+    private final PurchasedProductList purchasedList = new PurchasedProductList();
+
     public final static void clearConsole() {
         for (int i = 0; i < 50; i++) {
             System.out.println("");
@@ -60,9 +64,6 @@ public class Menu {
     public void registerUser() {
         System.out.println("==== Register ====");
         userList.registerUser();
-        do {
-            System.out.println("Press 1 to back to main menu ");
-        } while (!"1".equals(MyUtils.inputString("Enter: ")));
     }
 
     public void loginUser() {
@@ -71,7 +72,7 @@ public class Menu {
         if (currentUser == null) {
             System.out.println("Your username or password is incorrect. Please enter again or create a new one.");
         } else {
-//            userLoggedInMenu();
+            userLoggedInMenu();
         }
     }
 
@@ -101,9 +102,195 @@ public class Menu {
         }
     }
 
+    public void userLoggedInMenu() {
+        exit = false;
+        while (!exit) {
+            displayUserLoggedInMenu();
+            int choice = MyUtils.inputInteger("Please enter your choice", 1, 5);
+            switch (choice) {
+                case 1:
+                    displayAllShopList();
+                    break;
+                case 2:
+                    showAllProduct();
+                    break;
+                case 3:
+                    addProductToCart();
+                    break;
+                case 4:
+                    cartView();
+                    break;
+                case 5:
+                    logoutUser();
+                    break;
+            }
+        }
+    }
+
+    public void displayAllShopList() {
+        shopownerList.showAllShopOwner();
+        String enteredShopName = MyUtils.inputString("Type Shop name that you want to view: ");
+        shopownerList.readFromShopList();
+        for (ShopOwner so : shopownerList) {
+            if (so.getShopName().equals(enteredShopName)) {
+                currentOwner = so;
+            }
+        }
+    }
+
+    public void displayUserLoggedInMenu() {
+        System.out.println("1. Show all available Shop and choose a shop");
+        System.out.println("2. Show all Product");
+        System.out.println("3. Add Product To Cart");
+        System.out.println("4. View Cart");
+        System.out.println("5. Logout");
+    }
+
+    public void showAllProduct() {
+        if (currentOwner != null) {
+            productList.readFromProductList();
+            List<Product> l = new ArrayList<>();
+            for (Product prd : productList.toList()) {
+                if (prd.getShopowner().equals(currentOwner)) {
+                    l.add(prd);
+                }
+            }
+            productList.showAll(l);
+        } else {
+            System.out.println("You must choose a shop first before requesting show all product");
+        }
+    }
+
+    public void addProductToCart() {
+        shoppingCart.readFromProductCartList();
+        int productQuantity = 0;
+        showAllProduct();
+        String productID = MyUtils.inputString("Enter Product ID to add to cart: ");
+        productList.readFromProductList();
+        for (Product prd : productList.toList()) {
+            if (prd.getProductID().equals(productID) && prd.getShopowner().equals(currentOwner)) {
+                productQuantity = prd.getQuantity();
+            }
+        }
+        int inputQuantity = MyUtils.inputInteger("Enter quantity to add to cart: ", 0, productQuantity);
+        shoppingCart.addProductToCart(currentUser, productID, inputQuantity);
+        System.out.println("Add Successfully!");
+    }
+
+    public void displayCartView() {
+        System.out.println("==== Cart ====");
+        System.out.println("1. Show all Product in Cart");
+        System.out.println("2. Update Cart");
+        System.out.println("3. Purchcase product");
+        System.out.println("4. Rate Product");
+        System.out.println("5. Back");
+    }
+
+    public void cartView() {
+        exit = false;
+        while (!exit) {
+            displayCartView();
+            int choice = MyUtils.inputInteger("Please enter your choice", 1, 5);
+            switch (choice) {
+                case 1:
+                    showAllProductInCart();
+                    break;
+                case 2:
+                    updateProductInCart();
+                    break;
+                case 3:
+                    purchaseProduct();
+                    break;
+                case 4:
+                    rateProduct();
+                    break;
+                case 5:
+                    userLoggedInMenu();
+                    break;
+            }
+        }
+    }
+
+    public void showAllProductInCart() {
+        shoppingCart.viewCart(currentUser);
+    }
+
+    public void updateProductInCart() {
+        if (!shoppingCart.isEmp(currentUser)) {
+            showAllProductInCart();
+            System.out.println("1. Update a Product");
+            System.out.println("2. Delete a Product");
+            int choice = MyUtils.inputInteger("Select Choice", 1, 2);
+            if (choice == 1) {
+                String toUpdateProduct = MyUtils.inputString("Enter Product name you want to update: ");
+                int updateQuantity = MyUtils.inputInteger("Enter Quantity to update: ", 0, shoppingCart.getProductInCartQuantity(toUpdateProduct));
+                shoppingCart.updateProductQuantity(toUpdateProduct, updateQuantity);
+            }
+
+            if (choice == 2) {
+                String toDeleteProduct = MyUtils.inputString("Enter product id you want to delete: ");
+                shoppingCart.removeProduct(toDeleteProduct);
+            }
+        } else {
+            System.out.println("Cart is empty");
+        }
+
+    }
+
+    public void purchaseProduct() {
+        if (!shoppingCart.isEmp(currentUser)) {
+            List<Product> l = new ArrayList<>();
+            showAllProductInCart();
+            do {
+                String inputProductname = MyUtils.inputString("Enter Product name you want to purchase: ");
+                l.add(shoppingCart.getProduct(inputProductname));
+            } while (checkContinue() == true);
+
+            for (Product product : l) {
+                System.out.println(product);
+            }
+
+            if (checkConfirmInfo() == false) {
+                System.out.println("Back to view Cart");
+                cartView();
+            } else {
+                shoppingCart.purchaseProduct(l);
+            }
+        } else {
+            System.out.println("Cart is empty");
+        }
+
+    }
+
+    public void rateProduct() {
+        purchasedList.readFromProductPurchasedList();
+        do {
+            purchasedList.viewPurchasedList(currentUser);
+            String inputtedProductID = MyUtils.inputString("Enter Product ID you want to rate: ");
+            int inputRating = MyUtils.inputInteger("Rating this product: ", 0, 5);
+            productList.rateProduct(inputtedProductID, inputRating);
+            purchasedList.remove(inputtedProductID);
+        } while (checkContinue());
+        purchasedList.writeProductToPurchasedList();
+    }
+
+    public boolean checkContinue() {
+        String answer = MyUtils.inputString("Do you want to continue purchasing? Press 'y' to continue or 'n' to stop");
+        if (answer.toLowerCase().equals("y")) {
+            return true;
+        } else if (answer.toLowerCase().equals("n")) {
+            return false;
+        }
+
+        return false;
+    }
+
+    public boolean checkConfirmInfo() {
+        String answer = MyUtils.inputString("Confirm your products before purchasing? Press 'y' to agreee or 'n' to disagree");
+        return answer.toLowerCase().equals("y");
+    }
 
 //----------------------------------------------------------------------------------------------------------------------
-
     public void shopMenu() {
         exit = false;
         while (!exit) {
@@ -124,7 +311,6 @@ public class Menu {
         }
     }
 
-    
     public void displayShopMainMenu() {
         System.out.println("==== Shop Menu ====");
         System.out.println("1. Register");
@@ -172,10 +358,10 @@ public class Menu {
                 case 4:
                     updateProductInShop();
                     break;
-                case 5: 
+                case 5:
                     shopMenu();
                     break;
-                                        
+
             }
         }
     }
@@ -188,60 +374,70 @@ public class Menu {
         System.out.println("4. Update Product in Shop");
         System.out.println("5. Logout");
     }
-    
-    public void  showProduct(){
+
+    public void showProduct() {
         System.out.println("==== Show Product in Shop ====");
         productList.readFromProductList();
         List<Product> product = productList.toList();
-        for(Product prd: product){
-            if (prd.getShopowner().equals(currentOwner))
+        for (Product prd : product) {
+            if (prd.getShopowner().equals(currentOwner)) {
                 System.out.println(prd);
-            else {
+            } else {
                 System.out.println("There are no stores available");
             }
-        }     
+        }
     }
-    
-    public void addProductToShop() {
-         System.out.println("==== Add Product to Shop ====");
-         String productName = MyUtils.inputString("Enter product name: ");
-         double price = (double)MyUtils.inputInteger("Enter product price:",0,Integer.MAX_VALUE);
-         int quantity = MyUtils.inputInteger("Enter product quantity:",0,Integer.MAX_VALUE);
-         double rating = 0.0;
-         int soldQuantity = 0;
-         
-         Product product = new Product(productName, productName, quantity, price, soldQuantity, rating, currentOwner);
-         
-         productList.readFromProductList();
-         productList.addProduct(product);
-         productList.writeProductToList();
 
-         System.out.println("Product added to the shop");
+    public void addProductToShop() {
+        productList.readFromProductList();
+        System.out.println("==== Add Product to Shop ====");
+        String productID = MyUtils.inputString("Enter product ID: ");
+        String productName = MyUtils.inputString("Enter product name: ");
+        double price = (double) MyUtils.inputInteger("Enter product price:", 0, Integer.MAX_VALUE);
+        int quantity = MyUtils.inputInteger("Enter product quantity:", 0, Integer.MAX_VALUE);
+        double rating = 0.0;
+        int soldQuantity = 0;
+
+        Product product = new Product(productID, productName, quantity, price, soldQuantity, rating, currentOwner);
+        productList.addProduct(product);
+        productList.writeProductToList();
+        System.out.println("Product added to the shop");
     }
 
     public void removeProductFromShop() {
         System.out.println("==== Remove Product from Shop ====");
         String productID = MyUtils.inputString("Enter product ID to remove: ");
-        
+
         productList.readFromProductList();
-        for(Product prd: productList.toList())
-        {
-            if(prd.getProductID().equals(productID) && prd.getShopowner().equals(currentOwner))
+        for (Product prd : productList.toList()) {
+            if (prd.getProductID().equals(productID) && prd.getShopowner().equals(currentOwner)) {
                 productList.removeProduct(productID);
-            else 
+                break;
+            } else {
                 System.out.println("Product not found in the shop");
+            }
         }
+        productList.writeProductToList();
     }
 
     public void updateProductInShop() {
         System.out.println("==== Update Product in Shop ====");
         String productID = MyUtils.inputString("Enter product ID to update: ");
+        String productName = MyUtils.inputString("Enter new product name: ");
+        double price = (double) MyUtils.inputInteger("Enter new product price:", 0, Integer.MAX_VALUE);
+        int quantity = MyUtils.inputInteger("Enter new product quantity:", 0, Integer.MAX_VALUE);
+
         productList.readFromProductList();
-        for(Product prd: productList.toList())
-            if(prd.getProductID().equals(productID) && prd.getShopowner().equals(currentOwner))
-                productList.updateProduct(productID, prd);
-         else {
-            System.out.println("Product not found in the shop.");
+        for (Product prd : productList.toList()) {
+            if (prd.getProductID().equals(productID) && prd.getShopowner().equals(currentOwner)) {
+                prd.setProductName(productName);
+                prd.setPrice(price);
+                prd.setQuantity(quantity);
+                break;
+            } else {
+                System.out.println("Product not found in the shop.");
+            }
         }
+        productList.writeProductToList();
     }
 }

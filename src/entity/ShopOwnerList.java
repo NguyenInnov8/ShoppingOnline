@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.List;
 import utils.MyUtils;
@@ -23,7 +22,7 @@ import validate.Validation;
  * @author ADMIN
  */
 public class ShopOwnerList extends ArrayList<ShopOwner> {
-  private static final String shopListFile = "src\\data\\shopList.txt"; 
+  private static final String shopListFile = "src\\data\\shops.txt"; 
   private ProductList prdList = new ProductList();
 
   
@@ -58,7 +57,10 @@ public class ShopOwnerList extends ArrayList<ShopOwner> {
                 e.printStackTrace();
             }
         }
-    } catch (IOException e) {
+    } catch (EOFException ex) {
+        
+    }
+    catch (IOException e) {
         e.printStackTrace();
     }
 }
@@ -109,7 +111,16 @@ public class ShopOwnerList extends ArrayList<ShopOwner> {
         System.out.println("Product added to the shop: " + product.getProductName());
     } 
 
-
+    public void updateQuantityInShopAfterPurchase(int soldQuantity, Product product) {
+        prdList.readFromProductList();
+        for (Product prd: prdList.toList()) {
+            if(prd.equals(product)) {
+                prd.setQuantity(prd.getQuantity() - soldQuantity);
+                prd.setSoldQuantity(soldQuantity);
+            }
+        }
+        prdList.writeProductToList();
+    }
 
     public void updateProductInShop(Product product) {
          readFromShopList(); 
@@ -130,4 +141,6 @@ public class ShopOwnerList extends ArrayList<ShopOwner> {
             System.out.println(shopowner);
         }
     }
+    
+    
 }
