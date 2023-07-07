@@ -111,16 +111,6 @@ public class ShopOwnerList extends ArrayList<ShopOwner> {
         System.out.println("Product added to the shop: " + product.getProductName());
     } 
 
-    public void updateQuantityInShopAfterPurchase(int soldQuantity, Product product) {
-        prdList.readFromProductList();
-        for (Product prd: prdList.toList()) {
-            if(prd.equals(product)) {
-                prd.setQuantity(prd.getQuantity() - soldQuantity);
-                prd.setSoldQuantity(soldQuantity);
-            }
-        }
-        prdList.writeProductToList();
-    }
 
     public void updateProductInShop(Product product) {
          readFromShopList(); 

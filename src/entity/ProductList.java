@@ -95,6 +95,18 @@ public class ProductList extends HashMap<String, Product> {
         }
         writeProductToList();
     }
+    
+    public void updateQuantityInShopAfterPurchase(int soldQuantity, String productID) {
+        readFromProductList();
+        List<Product> l = toList();
+        for (Product prd: l) {
+            if(prd.getProductID().equals(productID)) {
+                prd.setQuantity(prd.getQuantity() - soldQuantity);
+                prd.setSoldQuantity(soldQuantity);
+            }
+        }
+        writeProductToList();
+    }
 
     public double getProductAverageRating(List<Integer> l) {
         if (l.isEmpty()) {

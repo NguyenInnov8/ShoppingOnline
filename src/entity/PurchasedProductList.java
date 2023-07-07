@@ -27,6 +27,10 @@ public class PurchasedProductList extends HashMap<String, Product>{
         return new ArrayList<>(this.values());
     }
     
+    public void addProduct(Product prd) {
+        this.put(prd.getProductID(), prd);
+    }
+    
      public void writeProductToPurchasedList() {
         try (FileOutputStream fos = new FileOutputStream(PurchasedProductListFile);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {

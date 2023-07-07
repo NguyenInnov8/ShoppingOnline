@@ -17,6 +17,7 @@ public class ShoppingCart extends HashMap<String, Product> implements Serializab
     private final static String productInCartFile = "src\\data\\productInCart.txt";
     private ProductList prdList = new ProductList();
     private ShopOwnerList sol = new ShopOwnerList();
+    private PurchasedProductList purList = new  PurchasedProductList();
     private double totalPrice = 0;
 
     public ShoppingCart() {
@@ -100,12 +101,15 @@ public class ShoppingCart extends HashMap<String, Product> implements Serializab
     
     public void purchaseProduct(List<Product> toPurchaseList) {
         readFromProductCartList();
-        toPurchaseList = new ArrayList<>();
+        purList.readFromProductPurchasedList();
         for (Product product : toPurchaseList) {
-            sol.updateQuantityInShopAfterPurchase(product.getQuantity(), product);
+            prdList.updateQuantityInShopAfterPurchase(product.getQuantity(), product.getProductID());
+            purList.addProduct(product);
+            purList.writeProductToPurchasedList();
             this.remove(product.getProductID());
         }
         writeProductToCartList();
+        
     }
 
     public void updateProductQuantity(String productName, int quantity) {

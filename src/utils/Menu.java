@@ -1,10 +1,14 @@
 package utils;
 
 import entity.*;
+import java.io.IOException;
 import static java.lang.System.out;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import validate.Validation;
 
 public class Menu {
 
@@ -391,8 +395,21 @@ public class Menu {
     public void addProductToShop() {
         productList.readFromProductList();
         System.out.println("==== Add Product to Shop ====");
-        String productID = MyUtils.inputString("Enter product ID: ");
-        String productName = MyUtils.inputString("Enter product name: ");
+        String productID = "";
+        String productName = "";
+        try {
+            do {
+                productID = MyUtils.inputString("Enter product ID: ");
+            } while(!Validation.isValidProductId(productID));
+        } catch (IOException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        do {
+            productName = MyUtils.inputString("Enter Product name: ");
+        } while(Validation.isValidProductName(productName));
         double price = (double) MyUtils.inputInteger("Enter product price:", 0, Integer.MAX_VALUE);
         int quantity = MyUtils.inputInteger("Enter product quantity:", 0, Integer.MAX_VALUE);
         double rating = 0.0;
