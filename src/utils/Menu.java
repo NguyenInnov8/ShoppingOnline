@@ -409,7 +409,7 @@ public class Menu {
         
         do {
             productName = MyUtils.inputString("Enter Product name: ");
-        } while(Validation.isValidProductName(productName));
+        } while(!Validation.isValidProductName(productName));
         double price = (double) MyUtils.inputInteger("Enter product price:", 0, Integer.MAX_VALUE);
         int quantity = MyUtils.inputInteger("Enter product quantity:", 0, Integer.MAX_VALUE);
         double rating = 0.0;

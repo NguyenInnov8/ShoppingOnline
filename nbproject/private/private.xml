@@ -11,16 +11,14 @@
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/ShopOwner.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/PurchasedProduct.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/PurchasedProductList.java</file>
-            <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/management/BillManagementImpl.java</file>
-            <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/management/BillManagement.java</file>
+            <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/data/shops.txt</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/utils/Menu.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/UserList.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/Product.java</file>
-            <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/management/ProductManagement.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/ProductList.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/entity/Bill.java</file>
-            <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/management/ProductManagementImpl.java</file>
             <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/utils/MyUtils.java</file>
+            <file>file:/D:/Self-studying%20project/Java%20Programming/ShoppingOnline/src/data/purchasedProduct.txt</file>
         </group>
     </open-files>
 </project-private>
